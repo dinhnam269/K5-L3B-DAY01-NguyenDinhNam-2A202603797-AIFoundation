@@ -1,0 +1,161 @@
+{
+ "seed": 102,
+ "predictions": {
+  "ml_f1": {
+   "text": "0.67",
+   "time": "14:39:33"
+  },
+  "ml_lr": {
+   "text": "lr=0.001 học chậm, lr=50 dễ mất ổn định",
+   "time": "14:54:52"
+  },
+  "dl_curve": {
+   "text": "Val loss tăng, MLP F1 cao hơn",
+   "time": "15:13:57"
+  },
+  "dl_relu": {
+   "text": "tương đương Logistic Regression, F1 có thể giảm",
+   "time": "15:17:28"
+  },
+  "emb_search": {
+   "text": "Spam",
+   "time": "15:38:00"
+  },
+  "emb_tricky": {
+   "text": "Encoder + LogReg",
+   "time": "15:42:22"
+  },
+  "llm_models": {
+   "text": "Model lớn F1 cao hơn một chút, đắt hơn nhiều lần; LLM chưa chắc thắng embedding",
+   "time": "15:50:11"
+  },
+  "llm_fewshot": {
+   "text": "F1 có thể tăng nhẹ, chi phí mỗi tin tăng",
+   "time": "15:51:09"
+  },
+  "tradeoff": {
+   "text": "Embedding và LLM lớn trên Pareto; LLM có thể vượt SLA 50 ms",
+   "time": "15:53:48"
+  },
+  "hard_eval": {
+   "text": "Accuracy sẽ giảm; BoW khó với tin nhắn dùng từ ngữ lạ hoặc không có từ khóa spam, LLM khó với tin nhắn mơ hồ hoặc thiếu ngữ cảnh",
+   "time": "15:56:19"
+  }
+ },
+ "checks": {
+  "1.1 vectorize": true,
+  "1.2 sigmoid / predict_proba": true,
+  "1.3 train_logreg": true,
+  "1.4 metrics": true,
+  "2.1 build_mlp": true,
+  "2.2 train_mlp": true,
+  "3.1–3.2 cosine / top_k_similar": true,
+  "3.3 knn_predict": true,
+  "4.2–4.3 prompt / parse_label": true,
+  "4.1 + 4.4 call_openai / llm_classify_batch": true
+ },
+ "experiments": [
+  {
+   "key": "ml_f1",
+   "time": "14:39:48"
+  },
+  {
+   "key": "ml_lr",
+   "time": "14:54:53"
+  },
+  {
+   "key": "dl_curve",
+   "time": "15:13:58"
+  },
+  {
+   "key": "dl_relu",
+   "time": "15:17:30"
+  },
+  {
+   "key": "emb_search",
+   "time": "15:38:02"
+  },
+  {
+   "key": "emb_tricky",
+   "time": "15:42:23"
+  },
+  {
+   "key": "llm_models",
+   "time": "15:50:14"
+  },
+  {
+   "key": "llm_fewshot",
+   "time": "15:51:10"
+  },
+  {
+   "key": "tradeoff",
+   "time": "15:53:50"
+  },
+  {
+   "key": "hard_eval",
+   "time": "15:56:22"
+  }
+ ],
+ "results": {
+  "1. BoW + LogReg (tự code)": {
+   "accuracy": 0.9793548387096774,
+   "precision": 0.9888888888888889,
+   "recall": 0.8557692307692307,
+   "f1": 0.9175257731958762,
+   "f1_SUB": 0.8571428571428571,
+   "train_s": 1.801938796000286,
+   "msg_per_s": 24377.763868458944,
+   "p50_ms": 0.044130000333097996,
+   "p95_ms": 0.07370999992417628,
+   "usd_per_1k": 0.0
+  },
+  "2. BoW + MLP (deep learning)": {
+   "accuracy": 0.9896774193548387,
+   "precision": 0.98,
+   "recall": 0.9423076923076923,
+   "f1": 0.9607843137254902,
+   "f1_SUB": 0.9473684210526316,
+   "train_s": 2.450313465000363,
+   "msg_per_s": 57870.854359444704,
+   "p50_ms": 0.13834999981554574,
+   "p95_ms": 0.2281799997490452,
+   "usd_per_1k": 0.0
+  },
+  "3a. Encoder (MiniLM) + kNN": {
+   "accuracy": 0.9754838709677419,
+   "precision": 0.8899082568807339,
+   "recall": 0.9326923076923077,
+   "f1": 0.9107981220657276,
+   "f1_SUB": 0.9743589743589743,
+   "train_s": 54.553601337000146,
+   "msg_per_s": 37.21486605403156,
+   "p50_ms": 26.87436199903459,
+   "p95_ms": 35.43259599937301,
+   "usd_per_1k": 0.0
+  },
+  "3b. Encoder (MiniLM) + LogReg": {
+   "accuracy": 0.9780645161290322,
+   "precision": 0.9065420560747663,
+   "recall": 0.9326923076923077,
+   "f1": 0.919431279620853,
+   "f1_SUB": 0.9473684210526316,
+   "train_s": 54.75119830800031,
+   "msg_per_s": 48.29541072710425,
+   "p50_ms": 20.97099300044647,
+   "p95_ms": 26.231441000072664,
+   "usd_per_1k": 0.0
+  },
+  "3c. Encoder (MiniLM) + MLP head": {
+   "accuracy": 0.9806451612903225,
+   "precision": 0.9158878504672897,
+   "recall": 0.9423076923076923,
+   "f1": 0.928909952606635,
+   "f1_SUB": 0.9473684210526316,
+   "train_s": 55.22397116299908,
+   "msg_per_s": 46.99187918437878,
+   "p50_ms": 22.89822249986173,
+   "p95_ms": 30.008391550927623,
+   "usd_per_1k": 0.0
+  }
+ }
+}
